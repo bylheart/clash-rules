@@ -1,18 +1,20 @@
 # 简介
 
-本项目生成适用于 [**Clash Premium**](https://github.com/Dreamacro/clash/releases/tag/premium) 的规则集（RULE-SET）。使用 GitHub Actions 北京时间每天早上 6:30 自动构建，保证规则最新。
+本项目生成适用于 [**Clash Premium 内核**](https://github.com/Dreamacro/clash/releases/tag/premium)的规则集（RULE-SET），同时适用于所有使用 Clash Premium 内核的 Clash 图形用户界面（GUI）客户端。使用 GitHub Actions 北京时间每天早上 6:30 自动构建，保证规则最新。
 
 ## 说明
 
-本项目的规则集（RULE-SET）主要来源于项目 [@Loyalsoldier/v2ray-rules-dat](https://github.com/Loyalsoldier/v2ray-rules-dat) 和 [@v2fly/domain-list-community](https://github.com/v2fly/domain-list-community)；[`Apple`](https://github.com/Loyalsoldier/clash-rules/blob/release/apple.txt) 和 [`Google`](https://github.com/Loyalsoldier/clash-rules/blob/release/google.txt) 列表里的域名来源于项目 [@felixonmars/dnsmasq-china-list](https://github.com/felixonmars/dnsmasq-china-list)；中国大陆 IPv4 地址数据使用 [@17mon/china_ip_list](https://github.com/17mon/china_ip_list)。
+本项目规则集（RULE-SET）的数据主要来源于项目 [@Loyalsoldier/v2ray-rules-dat](https://github.com/Loyalsoldier/v2ray-rules-dat) 和 [@v2fly/domain-list-community](https://github.com/v2fly/domain-list-community)；[`Apple`](https://github.com/Loyalsoldier/clash-rules/blob/release/apple.txt) 和 [`Google`](https://github.com/Loyalsoldier/clash-rules/blob/release/google.txt) 列表里的域名来源于项目 [@felixonmars/dnsmasq-china-list](https://github.com/felixonmars/dnsmasq-china-list)；中国大陆 IPv4 地址数据使用 [@17mon/china_ip_list](https://github.com/17mon/china_ip_list)。
 
 本项目的规则集（RULE-SET）只适用于 Clash **Premium** 版本。Clash Premium 相对于普通版，增加了 **TUN 增强模式**，能接管设备所有 TCP 和 UDP 流量，类似 [Surge for Mac](https://nssurge.com) 的增强模式。更多高级特性请看[官方 wiki](https://github.com/Dreamacro/clash/wiki/premium-core-features)。
 
-### Clash 各版本下载地址
+### Clash Premium 各版本下载地址
 
-- Clash Premium **命令行**版（兼容 Windows、macOS、Linux、OpenWRT 等多种平台）：[https://github.com/Dreamacro/clash/releases/tag/premium](https://github.com/Dreamacro/clash/releases/tag/premium)
-- Clash Premium **图形用户界面**版（ClashX Pro，兼容 macOS）：[https://install.appcenter.ms/users/clashx/apps/clashx-pro/distribution_groups/public](https://install.appcenter.ms/users/clashx/apps/clashx-pro/distribution_groups/public)
-- Clash Premium **图形用户界面**版（Clash for Windows，兼容 Windows、macOS）：[https://github.com/Fndroid/clash_for_windows_pkg/releases](https://github.com/Fndroid/clash_for_windows_pkg/releases)
+- Clash Premium **命令行**版（适用于 Windows、macOS、Linux、OpenWRT 等多种平台）：[https://github.com/Dreamacro/clash/releases/tag/premium](https://github.com/Dreamacro/clash/releases/tag/premium)
+- Clash Premium **图形用户界面**版：
+  - [ClashX Pro](https://install.appcenter.ms/users/clashx/apps/clashx-pro/distribution_groups/public)（适用于 macOS）
+  - [Clash for Windows](https://github.com/Fndroid/clash_for_windows_pkg/releases)（适用于 Windows、macOS）
+  - [Clash for Android](https://github.com/Kr328/ClashForAndroid/releases)（适用于 Android）
 
 ## 规则文件地址及使用方式
 
@@ -29,6 +31,9 @@
 - **广告域名列表 reject.txt**：
   - [https://raw.githubusercontent.com/Loyalsoldier/clash-rules/release/reject.txt](https://raw.githubusercontent.com/Loyalsoldier/clash-rules/release/reject.txt)
   - [https://cdn.jsdelivr.net/gh/Loyalsoldier/clash-rules@release/reject.txt](https://cdn.jsdelivr.net/gh/Loyalsoldier/clash-rules@release/reject.txt)
+- **私有网络专用域名列表 private.txt**：
+  - [https://raw.githubusercontent.com/Loyalsoldier/clash-rules/release/private.txt](https://raw.githubusercontent.com/Loyalsoldier/clash-rules/release/private.txt)
+  - [https://cdn.jsdelivr.net/gh/Loyalsoldier/clash-rules@release/private.txt](https://cdn.jsdelivr.net/gh/Loyalsoldier/clash-rules@release/private.txt)
 - **Apple 域名列表 apple.txt**：
   - [https://raw.githubusercontent.com/Loyalsoldier/clash-rules/release/apple.txt](https://raw.githubusercontent.com/Loyalsoldier/clash-rules/release/apple.txt)
   - [https://cdn.jsdelivr.net/gh/Loyalsoldier/clash-rules@release/apple.txt](https://cdn.jsdelivr.net/gh/Loyalsoldier/clash-rules@release/apple.txt)
@@ -109,6 +114,13 @@ rule-providers:
     path: ./ruleset/direct.yaml
     interval: 86400
 
+  private:
+    type: http
+    behavior: domain
+    url: "https://cdn.jsdelivr.net/gh/Loyalsoldier/clash-rules@release/private.txt"
+    path: ./ruleset/private.yaml
+    interval: 86400
+
   gfw:
     type: http
     behavior: domain
@@ -162,12 +174,28 @@ rule-providers:
 ```yaml
 rules:
   - PROCESS-NAME,v2ray,DIRECT
-  - PROCESS-NAME,Surge%203,DIRECT
-  - PROCESS-NAME,ss-local,DIRECT
-  - PROCESS-NAME,privoxy,DIRECT
+  - PROCESS-NAME,xray,DIRECT
+  - PROCESS-NAME,naive,DIRECT
   - PROCESS-NAME,trojan,DIRECT
   - PROCESS-NAME,trojan-go,DIRECT
-  - PROCESS-NAME,naive,DIRECT
+  - PROCESS-NAME,ss-local,DIRECT
+  - PROCESS-NAME,privoxy,DIRECT
+  - PROCESS-NAME,leaf,DIRECT
+  - PROCESS-NAME,v2ray.exe,DIRECT
+  - PROCESS-NAME,xray.exe,DIRECT
+  - PROCESS-NAME,naive.exe,DIRECT
+  - PROCESS-NAME,trojan.exe,DIRECT
+  - PROCESS-NAME,trojan-go.exe,DIRECT
+  - PROCESS-NAME,ss-local.exe,DIRECT
+  - PROCESS-NAME,privoxy.exe,DIRECT
+  - PROCESS-NAME,leaf.exe,DIRECT
+  - PROCESS-NAME,Surge,DIRECT
+  - PROCESS-NAME,Surge 2,DIRECT
+  - PROCESS-NAME,Surge 3,DIRECT
+  - PROCESS-NAME,Surge 4,DIRECT
+  - PROCESS-NAME,Surge%202,DIRECT
+  - PROCESS-NAME,Surge%203,DIRECT
+  - PROCESS-NAME,Surge%204,DIRECT
   - PROCESS-NAME,Thunder,DIRECT
   - PROCESS-NAME,DownloadService,DIRECT
   - PROCESS-NAME,qBittorrent,DIRECT
@@ -178,8 +206,20 @@ rules:
   - PROCESS-NAME,NetTransport,DIRECT
   - PROCESS-NAME,uTorrent,DIRECT
   - PROCESS-NAME,WebTorrent,DIRECT
+  - PROCESS-NAME,aria2c.exe,DIRECT
+  - PROCESS-NAME,BitComet.exe,DIRECT
+  - PROCESS-NAME,fdm.exe,DIRECT
+  - PROCESS-NAME,NetTransport.exe,DIRECT
+  - PROCESS-NAME,qbittorrent.exe,DIRECT
+  - PROCESS-NAME,Thunder.exe,DIRECT
+  - PROCESS-NAME,ThunderVIP.exe,DIRECT
+  - PROCESS-NAME,transmission-daemon.exe,DIRECT
+  - PROCESS-NAME,transmission-qt.exe,DIRECT
+  - PROCESS-NAME,uTorrent.exe,DIRECT
+  - PROCESS-NAME,WebTorrent.exe,DIRECT
   - DOMAIN,clash.razord.top,DIRECT
   - DOMAIN,yacd.haishan.me,DIRECT
+  - RULE-SET,private,DIRECT
   - RULE-SET,reject,REJECT
   - RULE-SET,icloud,DIRECT
   - RULE-SET,apple,DIRECT
@@ -200,12 +240,28 @@ rules:
 ```yaml
 rules:
   - PROCESS-NAME,v2ray,DIRECT
-  - PROCESS-NAME,Surge%203,DIRECT
-  - PROCESS-NAME,ss-local,DIRECT
-  - PROCESS-NAME,privoxy,DIRECT
+  - PROCESS-NAME,xray,DIRECT
+  - PROCESS-NAME,naive,DIRECT
   - PROCESS-NAME,trojan,DIRECT
   - PROCESS-NAME,trojan-go,DIRECT
-  - PROCESS-NAME,naive,DIRECT
+  - PROCESS-NAME,ss-local,DIRECT
+  - PROCESS-NAME,privoxy,DIRECT
+  - PROCESS-NAME,leaf,DIRECT
+  - PROCESS-NAME,v2ray.exe,DIRECT
+  - PROCESS-NAME,xray.exe,DIRECT
+  - PROCESS-NAME,naive.exe,DIRECT
+  - PROCESS-NAME,trojan.exe,DIRECT
+  - PROCESS-NAME,trojan-go.exe,DIRECT
+  - PROCESS-NAME,ss-local.exe,DIRECT
+  - PROCESS-NAME,privoxy.exe,DIRECT
+  - PROCESS-NAME,leaf.exe,DIRECT
+  - PROCESS-NAME,Surge,DIRECT
+  - PROCESS-NAME,Surge 2,DIRECT
+  - PROCESS-NAME,Surge 3,DIRECT
+  - PROCESS-NAME,Surge 4,DIRECT
+  - PROCESS-NAME,Surge%202,DIRECT
+  - PROCESS-NAME,Surge%203,DIRECT
+  - PROCESS-NAME,Surge%204,DIRECT
   - PROCESS-NAME,Thunder,DIRECT
   - PROCESS-NAME,DownloadService,DIRECT
   - PROCESS-NAME,qBittorrent,DIRECT
@@ -216,47 +272,25 @@ rules:
   - PROCESS-NAME,NetTransport,DIRECT
   - PROCESS-NAME,uTorrent,DIRECT
   - PROCESS-NAME,WebTorrent,DIRECT
+  - PROCESS-NAME,aria2c.exe,DIRECT
+  - PROCESS-NAME,BitComet.exe,DIRECT
+  - PROCESS-NAME,fdm.exe,DIRECT
+  - PROCESS-NAME,NetTransport.exe,DIRECT
+  - PROCESS-NAME,qbittorrent.exe,DIRECT
+  - PROCESS-NAME,Thunder.exe,DIRECT
+  - PROCESS-NAME,ThunderVIP.exe,DIRECT
+  - PROCESS-NAME,transmission-daemon.exe,DIRECT
+  - PROCESS-NAME,transmission-qt.exe,DIRECT
+  - PROCESS-NAME,uTorrent.exe,DIRECT
+  - PROCESS-NAME,WebTorrent.exe,DIRECT
   - DOMAIN,clash.razord.top,DIRECT
   - DOMAIN,yacd.haishan.me,DIRECT
+  - RULE-SET,private,DIRECT
   - RULE-SET,reject,REJECT
   - RULE-SET,tld-not-cn,PROXY
   - RULE-SET,gfw,PROXY
   - RULE-SET,greatfire,PROXY
   - RULE-SET,telegramcidr,PROXY
-  - GEOIP,AE,PROXY
-  - GEOIP,AU,PROXY
-  - GEOIP,BR,PROXY
-  - GEOIP,CA,PROXY
-  - GEOIP,DE,PROXY
-  - GEOIP,DK,PROXY
-  - GEOIP,ES,PROXY
-  - GEOIP,FI,PROXY
-  - GEOIP,FR,PROXY
-  - GEOIP,GB,PROXY
-  - GEOIP,GR,PROXY
-  - GEOIP,HK,PROXY
-  - GEOIP,ID,PROXY
-  - GEOIP,IL,PROXY
-  - GEOIP,IN,PROXY
-  - GEOIP,IQ,PROXY
-  - GEOIP,IR,PROXY
-  - GEOIP,IT,PROXY
-  - GEOIP,JP,PROXY
-  - GEOIP,KR,PROXY
-  - GEOIP,MO,PROXY
-  - GEOIP,MY,PROXY
-  - GEOIP,NL,PROXY
-  - GEOIP,NO,PROXY
-  - GEOIP,NZ,PROXY
-  - GEOIP,PH,PROXY
-  - GEOIP,RU,PROXY
-  - GEOIP,SA,PROXY
-  - GEOIP,SG,PROXY
-  - GEOIP,TH,PROXY
-  - GEOIP,TR,PROXY
-  - GEOIP,TW,PROXY
-  - GEOIP,US,PROXY
-  - GEOIP,VN,PROXY
   - MATCH,DIRECT
 ```
 
